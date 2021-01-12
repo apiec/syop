@@ -64,7 +64,18 @@ for ( ;$i -lt $args.count; $i++ ) {
             Scale -image $imgs[1] -width $args[$i+1] -height $args[$i+2] 
             $i += 2
         }
+        'norm1' { Normalize -image $imgs[0] }
+        'norm2' { Normalize -image $imgs[1] }
         'diff' { DiffImages -image1 $imgs[0] -image2 $imgs[1] }
+        'shuffle1' { 
+            Shuffle -image $imgs[0] -iters $args[$i+1]
+            $i++
+        }
+        'shuffle2' { 
+            Shuffle -image $imgs[1] -iters $args[$i+1]
+            $i++
+        }
+        
         'save' {
             $iter = 0
             while (![string]::IsNullOrEmpty($imgs[$iter]))

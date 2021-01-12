@@ -152,3 +152,20 @@ function ToGrayscale {
     [Emgu.CV.CvInvoke]::Decolor($image, $image, $placeholder)
     NameAndShow -windowName "gray" -image $image
 }
+
+function Normalize {
+    param (
+        [Emgu.CV.IInputArray]$image
+    )
+    [Emgu.CV.CvInvoke]::Normalize($image, $image)
+    NameAndShow -windowName "normalize" -image $image
+}
+
+function Shuffle{
+    param (
+        [Emgu.CV.IInputArray]$image,
+        [double]$iters
+    )
+    [Emgu.CV.CvInvoke]::RandShuffle($image, $iters, 0)
+    NameAndShow -windowName "shuffle" -image $image
+}  
