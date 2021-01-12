@@ -56,11 +56,12 @@ function Edges {
         [Emgu.CV.IInputArray]$image,
         [int]$threshold
     )
-    $edges = [Emgu.CV.Mat]::new()
-    [Emgu.CV.CvInvoke]::Canny($image, $edges, $threshold, $threshold+50)
-    NameAndShow -windowName 'edges' -image $edges
-
+    $copy = $image.Clone()
+    [Emgu.CV.CvInvoke]::Canny($copy, $image, $threshold, $threshold+50)
+    NameAndShow -windowName 'edges' -image $image
 }
+
+
 
 Add-Type -Path C:\Users\perfe\Desktop\syop\libs\Emgu.CV.Platform.NetStandard.dll
 
@@ -84,7 +85,9 @@ for ( ;$i -lt $args.count; $i++ ) {
         {$_ -in 'or', 'and', 'xor', 'not1', 'not2'} 
         { Bitwise -image1 $imgs[0] -image2 $imgs[1] -operationType $args[$i] } 
         'edges1' { 
+            Write-Host $imgs[0].GetType()
             Edges -image $imgs[0] -threshold $args[$i+1]
+            Write-Host $imgs[0].GetType()
             $i++
         }
         'edges2' {
