@@ -1,69 +1,5 @@
-function NameAndShow {
-    param (
-        [string]$windowName,
-        [Emgu.CV.IInputArray]$image
-    )
-    [Emgu.CV.CvInvoke]::Imshow($windowName , $image)
-    [Emgu.CV.CvInvoke]::WaitKey(0)      
-    [Emgu.CV.CvInvoke]::DestroyWindow($windowName)  
-}
-
-function FlipImageAndShow {
-    param (
-        [Emgu.CV.IInputArray]$image,
-        [Emgu.CV.CvEnum.FlipType]$flipType
-    )
-    # $flip = [Emgu.CV.Mat]::new()
-    [Emgu.CV.CvInvoke]::Flip($image, $image, $flipType)
-    NameAndShow -windowName 'flip' -image $image
-}
-
-function Blur {
-    param (
-        [Emgu.CV.IInputArray]$image
-    )
-    # $outImage = [Emgu.CV.Mat]::new()
-    $kernel = [System.Drawing.Size]::new(8,8)
-    $kernel2 = [System.Drawing.Size]::new(-1,-1)
-    [Emgu.CV.CvInvoke]::Blur($image, $image, $kernel, $kernel2)
-    NameAndShow -windowName 'blur' -image $image
-}
-
-function Bitwise {
-    param (
-        [Emgu.CV.IInputArray]$image1,
-        [Emgu.CV.IInputArray]$image2,
-        [string]$operationType    
-    )
-    Write-Host 'Resizing image to perform bitwise operations'
-    [Emgu.CV.CvInvoke]::Resize($image2, $image2, [System.Drawing.Size]::new($imgs[0].Width, $imgs[0].Height))
-    switch ($operationType) {
-        'or' { [Emgu.CV.CvInvoke]::BitwiseOr($image1, $image2, $image1) }
-        'and' { [Emgu.CV.CvInvoke]::BitwiseAnd($image1, $image2, $image1) }
-        'xor' { [Emgu.CV.CvInvoke]::BitwiseXor($image1, $image2, $image1) }
-        'not1' { [Emgu.CV.CvInvoke]::BitwiseNot($image1, $image1) }
-        'not2' { 
-            [Emgu.CV.CvInvoke]::BitwiseNot($image2, $image2)
-            NameAndShow -windowName $operationType -image $image2
-            return
-        }
-    }
-    NameAndShow -windowName $operationType -image $image1
-}
-
-function Edges {
-    param (
-        [Emgu.CV.IInputArray]$image,
-        [int]$threshold
-    )
-    $copy = $image.Clone()
-    [Emgu.CV.CvInvoke]::Canny($copy, $image, $threshold, $threshold+50)
-    NameAndShow -windowName 'edges' -image $image
-}
-
-
-
-Add-Type -Path C:\Users\perfe\Desktop\syop\libs\Emgu.CV.Platform.NetStandard.dll
+. ./functions.ps1
+Add-Type -Path .\libs\Emgu.CV.Platform.NetStandard.dll
 
 $i = 0
 $imgs = ' ', ' '
@@ -94,5 +30,29 @@ for ( ;$i -lt $args.count; $i++ ) {
             Edges -image $imgs[1] -threshold $args[$i+1]
             $i++
          }
+        'vignette1' { Vignette -image $imgs[0] -output $imgs[0]}
+        'vignette2' { Vignette -image $imgs[1] -output $imgs[1]}
+        'rotate1' { 
+            if ($i -lt $args.Count) {
+                $consumed = Rotate -image $imgs[0] -rotateToken $args[$i + 1]
+                if ($consumed -eq 1) {
+                    $i++
+                }
+            }
+            else {
+                Rotate -image $imgs[0]
+            }
+        }
+        'rotate2' { 
+            if ($i -lt $args.Count) {
+                $consumed = Rotate -image $imgs[1] -rotateToken $args[$i + 1]
+                if ($consumed -eq 1) {
+                    $i++
+                }
+            }
+            else {
+                Rotate -image $imgs[1]
+            }
+        }
     }
 } 
