@@ -78,8 +78,8 @@ function GenerateGaussianKernel {
             $yRelative = $yi - $Y / 2
             $r = [System.Math]::Sqrt($xRelative *$xRelative + $yRelative * $yRelative)
             $val = [System.Math]::Exp(-($r * $r) / $s) / ([System.Math]::PI * $s)
-            $im.Item($xi, $yi) = $val
-
+            $im.Item($yi, $xi) = $val
+            
             if ($val -gt $max) {
                 $max = $val
             }
