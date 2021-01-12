@@ -72,8 +72,6 @@ for ( ;$i -lt $args.Count; $i++ ) {
                 Rotate -image $imgs[1]
             }
         }
-<<<<<<< HEAD
-=======
         'scale1' {
              Scale -image $imgs[0] -width $args[$i+1] -height $args[$i+2] 
              $i += 2
@@ -109,6 +107,5 @@ for ( ;$i -lt $args.Count; $i++ ) {
                 }
             } 
         }
->>>>>>> 98b1469160c642d368f18a99d1f2ab2f3536e78f
     }
 } 
