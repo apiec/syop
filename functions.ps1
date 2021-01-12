@@ -1,3 +1,5 @@
+Add-Type -Path $PSScriptRoot\libs\Emgu.CV.Platform.NetStandard.dll
+
 function NameAndShow {
     param (
         [string]$windowName,

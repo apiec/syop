@@ -1,15 +1,33 @@
-. ./functions.ps1
-Add-Type -Path .\libs\Emgu.CV.Platform.NetStandard.dll
+. $PSScriptRoot/functions.ps1
+
+Add-Type -Path $PSScriptRoot\libs\Emgu.CV.Platform.NetStandard.dll
 
 $i = 0
-$imgs = '', ''
-while ($args[$i].Contains('.png') -or $args[$i].Contains('.jpg')){
-    $imgs[$i] = [Emgu.CV.CvInvoke]::Imread('.\' + $args[$i])
+$imgs = ' ', ' '
+
+while ($args[$i].Contains('.png') -or
+       $args[$i].Contains('.jpg') -or
+       $args[$i].Contains('.bmp')) {
+
+    $fileName = $args[$i]
+    if ($fileName.substring(0, 2) -eq './') {
+        $callerPath = Get-Location
+        $fileName = $fileName.substring(2, $fileName.Length - 2)
+        $fileName = $callerPath.ToString() + $fileName
+    }
+
+    try {
+        $imgs[$i] = [Emgu.CV.CvInvoke]::Imread($fileName)
+    }
+    catch {
+        Write-Error "Did not find file $fileName"
+        return
+    }
     $i++
 }
 
 
-for ( ;$i -lt $args.count; $i++ ) {
+for ( ;$i -lt $args.Count; $i++ ) {
     switch ($args[$i]) 
     {
         'flip1' { FlipImageAndShow -image $imgs[0] -flipType 1 }
@@ -21,9 +39,7 @@ for ( ;$i -lt $args.count; $i++ ) {
         {$_ -in 'or', 'and', 'xor', 'not1', 'not2'} 
         { Bitwise -image1 $imgs[0] -image2 $imgs[1] -operationType $args[$i] } 
         'edges1' { 
-            Write-Host $imgs[0].GetType()
             Edges -image $imgs[0] -threshold $args[$i+1]
-            Write-Host $imgs[0].GetType()
             $i++
         }
         'edges2' {
@@ -56,6 +72,8 @@ for ( ;$i -lt $args.count; $i++ ) {
                 Rotate -image $imgs[1]
             }
         }
+<<<<<<< HEAD
+=======
         'scale1' {
              Scale -image $imgs[0] -width $args[$i+1] -height $args[$i+2] 
              $i += 2
@@ -91,5 +109,6 @@ for ( ;$i -lt $args.count; $i++ ) {
                 }
             } 
         }
+>>>>>>> 98b1469160c642d368f18a99d1f2ab2f3536e78f
     }
 } 
