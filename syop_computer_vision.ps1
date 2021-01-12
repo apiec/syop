@@ -21,7 +21,9 @@ for ( ;$i -lt $args.count; $i++ ) {
         {$_ -in 'or', 'and', 'xor', 'not1', 'not2'} 
         { Bitwise -image1 $imgs[0] -image2 $imgs[1] -operationType $args[$i] } 
         'edges1' { 
+            Write-Host $imgs[0].GetType()
             Edges -image $imgs[0] -threshold $args[$i+1]
+            Write-Host $imgs[0].GetType()
             $i++
         }
         'edges2' {
