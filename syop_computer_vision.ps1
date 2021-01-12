@@ -2,7 +2,7 @@
 Add-Type -Path .\libs\Emgu.CV.Platform.NetStandard.dll
 
 $i = 0
-$imgs = ' ', ' '
+$imgs = '', ''
 while ($args[$i].Contains('.png') -or $args[$i].Contains('.jpg')){
     $imgs[$i] = [Emgu.CV.CvInvoke]::Imread('.\' + $args[$i])
     $i++
@@ -53,6 +53,26 @@ for ( ;$i -lt $args.count; $i++ ) {
             else {
                 Rotate -image $imgs[1]
             }
+        }
+        'scale1' {
+             Scale -image $imgs[0] -width $args[$i+1] -height $args[$i+2] 
+             $i += 2
+        }
+        'scale2' { 
+            Scale -image $imgs[1] -width $args[$i+1] -height $args[$i+2] 
+            $i += 2
+        }
+        'save' {
+            $iter = 0
+            while (![string]::IsNullOrEmpty($imgs[$iter]))
+            {
+                $imgs[$iter].Save('.\modified' + $args[$iter])
+                Write-Host "File", $args[$iter], "succesfully saved."
+                $iter++
+                if ($iter -eq 2) {
+                    break
+                }
+            } 
         }
     }
 } 

@@ -56,9 +56,9 @@ function Edges {
         [Emgu.CV.IInputArray]$image,
         [int]$threshold
     )
-    $edges = [Emgu.CV.Mat]::new()
-    [Emgu.CV.CvInvoke]::Canny($image, $edges, $threshold, $threshold+50)
-    NameAndShow -windowName 'edges' -image $edges
+    $copy = $image.Clone()
+    [Emgu.CV.CvInvoke]::Canny($copy, $image, $threshold, $threshold+50)
+    NameAndShow -windowName 'edges' -image $image
 
 }
 
@@ -124,4 +124,14 @@ function Rotate {
     NameAndShow -windowName 'Rotate' -image $image
     
     return $ret
+}
+
+function Scale {
+    param (
+        [Emgu.CV.IInputArray]$image,
+        [int]$width,
+        [int]$height
+    )
+    [Emgu.CV.CvInvoke]::Resize($image, $image, [System.Drawing.Size]::new($width, $height))
+    NameAndShow -windowName "scale to $width $height" -image $image
 }
