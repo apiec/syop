@@ -15,7 +15,6 @@ function FlipImageAndShow {
         [Emgu.CV.IInputArray]$image,
         [Emgu.CV.CvEnum.FlipType]$flipType
     )
-    # $flip = [Emgu.CV.Mat]::new()
     [Emgu.CV.CvInvoke]::Flip($image, $image, $flipType)
     NameAndShow -windowName 'flip' -image $image
 }
@@ -24,7 +23,6 @@ function Blur {
     param (
         [Emgu.CV.IInputArray]$image
     )
-    # $outImage = [Emgu.CV.Mat]::new()
     $kernel = [System.Drawing.Size]::new(8,8)
     $kernel2 = [System.Drawing.Size]::new(-1,-1)
     [Emgu.CV.CvInvoke]::Blur($image, $image, $kernel, $kernel2)
@@ -38,7 +36,7 @@ function Bitwise {
         [string]$operationType    
     )
     Write-Host 'Resizing image to perform bitwise operations'
-    [Emgu.CV.CvInvoke]::Resize($image2, $image2, [System.Drawing.Size]::new($imgs[0].Width, $imgs[0].Height))
+    [Emgu.CV.CvInvoke]::Resize($image2, $image2, [System.Drawing.Size]::new($image1.Width, $image1.Height))
     switch ($operationType) {
         'or' { [Emgu.CV.CvInvoke]::BitwiseOr($image1, $image2, $image1) }
         'and' { [Emgu.CV.CvInvoke]::BitwiseAnd($image1, $image2, $image1) }
@@ -137,3 +135,39 @@ function Scale {
     [Emgu.CV.CvInvoke]::Resize($image, $image, [System.Drawing.Size]::new($width, $height))
     NameAndShow -windowName "scale to $width $height" -image $image
 }
+
+function DiffImages {
+    param (
+        [Emgu.CV.IInputArray]$image1,
+        [Emgu.CV.IInputArray]$image2
+    )
+    [Emgu.CV.CvInvoke]::Resize($image2, $image2, [System.Drawing.Size]::new($image1.Width, $image1.Height))
+    [Emgu.CV.CvInvoke]::AbsDiff($image1, $image2, $image1)
+    NameAndShow -windowName "difference" -image $image1
+}
+
+function ToGrayscale {
+    param (
+        [Emgu.CV.IInputArray]$image
+    )
+    $placeholder = [Emgu.CV.Mat]::new()
+    [Emgu.CV.CvInvoke]::Decolor($image, $image, $placeholder)
+    NameAndShow -windowName "gray" -image $image
+}
+
+function Normalize {
+    param (
+        [Emgu.CV.IInputArray]$image
+    )
+    [Emgu.CV.CvInvoke]::Normalize($image, $image)
+    NameAndShow -windowName "normalize" -image $image
+}
+
+function Shuffle{
+    param (
+        [Emgu.CV.IInputArray]$image,
+        [double]$iters
+    )
+    [Emgu.CV.CvInvoke]::RandShuffle($image, $iters, 0)
+    NameAndShow -windowName "shuffle" -image $image
+}  

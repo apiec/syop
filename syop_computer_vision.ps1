@@ -48,6 +48,8 @@ for ( ;$i -lt $args.Count; $i++ ) {
          }
         'vignette1' { Vignette -image $imgs[0] -output $imgs[0]}
         'vignette2' { Vignette -image $imgs[1] -output $imgs[1]}
+        'gray1' { ToGrayscale -image $imgs[0] }
+        'gray2' { ToGrayscale -image $imgs[1] }
         'rotate1' { 
             if ($i -lt $args.Count) {
                 $consumed = Rotate -image $imgs[0] -rotateToken $args[$i + 1]
@@ -70,5 +72,40 @@ for ( ;$i -lt $args.Count; $i++ ) {
                 Rotate -image $imgs[1]
             }
         }
+<<<<<<< HEAD
+=======
+        'scale1' {
+             Scale -image $imgs[0] -width $args[$i+1] -height $args[$i+2] 
+             $i += 2
+        }
+        'scale2' { 
+            Scale -image $imgs[1] -width $args[$i+1] -height $args[$i+2] 
+            $i += 2
+        }
+        'norm1' { Normalize -image $imgs[0] }
+        'norm2' { Normalize -image $imgs[1] }
+        'diff' { DiffImages -image1 $imgs[0] -image2 $imgs[1] }
+        'shuffle1' { 
+            Shuffle -image $imgs[0] -iters $args[$i+1]
+            $i++
+        }
+        'shuffle2' { 
+            Shuffle -image $imgs[1] -iters $args[$i+1]
+            $i++
+        }
+        
+        'save' {
+            $iter = 0
+            while (![string]::IsNullOrEmpty($imgs[$iter]))
+            {
+                $imgs[$iter].Save('.\modified' + $args[$iter])
+                Write-Host "File", $args[$iter], "succesfully saved."
+                $iter++
+                if ($iter -eq 2) {
+                    break
+                }
+            } 
+        }
+>>>>>>> 98b1469160c642d368f18a99d1f2ab2f3536e78f
     }
 } 
