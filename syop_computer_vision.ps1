@@ -72,8 +72,6 @@ for ( ;$i -lt $args.Count; $i++ ) {
                 Rotate -image $imgs[1]
             }
         }
-<<<<<<< HEAD
-=======
         'scale1' {
              Scale -image $imgs[0] -width $args[$i+1] -height $args[$i+2] 
              $i += 2
@@ -98,14 +96,14 @@ for ( ;$i -lt $args.Count; $i++ ) {
             $iter = 0
             while (![string]::IsNullOrEmpty($imgs[$iter]))
             {
-                $imgs[$iter].Save('.\modified' + $args[$iter])
-                Write-Host "File", $args[$iter], "succesfully saved."
+                $fileName = ($iter + 1).ToString() + ".png"
+                $imgs[$iter].Save($fileName)
+                Write-Host "File $fileName succesfully saved."
                 $iter++
                 if ($iter -eq 2) {
                     break
                 }
             } 
         }
->>>>>>> 98b1469160c642d368f18a99d1f2ab2f3536e78f
     }
 } 
