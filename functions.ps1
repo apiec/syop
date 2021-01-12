@@ -169,3 +169,15 @@ function Shuffle{
     [Emgu.CV.CvInvoke]::RandShuffle($image, $iters, 0)
     NameAndShow -windowName "shuffle" -image $image
 }  
+
+function Multiply{
+    param (
+        [Emgu.CV.IInputArray]$image1,
+        [Emgu.CV.IInputArray]$image2,
+        [double]$param
+    )
+    [Emgu.CV.CvInvoke]::Resize($image2, $image2, [System.Drawing.Size]::new($image1.Width, $image1.Height))
+    [Emgu.CV.CvInvoke]::Multiply($image1, $image2, $image1, $param)
+    NameAndShow -windowName "multiply" -image $image1
+    
+}

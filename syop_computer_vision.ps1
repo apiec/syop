@@ -75,7 +75,10 @@ for ( ;$i -lt $args.count; $i++ ) {
             Shuffle -image $imgs[1] -iters $args[$i+1]
             $i++
         }
-        
+        'multi'{
+            Multiply -image1 $imgs[0] -image2 $imgs[1] -param $args[$i+1]
+            $i++
+         }
         'save' {
             $iter = 0
             while (![string]::IsNullOrEmpty($imgs[$iter]))
