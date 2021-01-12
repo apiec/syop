@@ -106,3 +106,22 @@ function Vignette {
     [Emgu.CV.CvInvoke]::Multiply($image, $kernel, $output, 1/255)
     NameAndShow -windowName 'Vignette' -image $output
 }
+
+function Rotate {
+    param (
+        [Emgu.CV.Mat]$image,
+        [string]$rotateToken
+    )
+
+    $ret = 0
+    switch ($rotateToken) {
+        'ccw' { 
+            [Emgu.CV.CvInvoke]::Rotate($image, $image, [Emgu.CV.CvEnum.RotateFlags]::Rotate90CounterClockwise)
+            $ret = 1
+         }
+        Default { [Emgu.CV.CvInvoke]::Rotate($image, $image, [Emgu.CV.CvEnum.RotateFlags]::Rotate90Clockwise) }
+    }
+    NameAndShow -windowName 'Rotate' -image $image
+    
+    return $ret
+}

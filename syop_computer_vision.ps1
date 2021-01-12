@@ -28,7 +28,29 @@ for ( ;$i -lt $args.count; $i++ ) {
             Edges -image $imgs[1] -threshold $args[$i+1]
             $i++
          }
-         'vignette1' { Vignette -image $imgs[0] -output $imgs[0]}
-         'vignette2' { Vignette -image $imgs[1] -output $imgs[1]}
+        'vignette1' { Vignette -image $imgs[0] -output $imgs[0]}
+        'vignette2' { Vignette -image $imgs[1] -output $imgs[1]}
+        'rotate1' { 
+            if ($i -lt $args.Count) {
+                $consumed = Rotate -image $imgs[0] -rotateToken $args[$i + 1]
+                if ($consumed -eq 1) {
+                    $i++
+                }
+            }
+            else {
+                Rotate -image $imgs[0]
+            }
+        }
+        'rotate2' { 
+            if ($i -lt $args.Count) {
+                $consumed = Rotate -image $imgs[1] -rotateToken $args[$i + 1]
+                if ($consumed -eq 1) {
+                    $i++
+                }
+            }
+            else {
+                Rotate -image $imgs[1]
+            }
+        }
     }
 } 
