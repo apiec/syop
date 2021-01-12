@@ -32,6 +32,8 @@ for ( ;$i -lt $args.count; $i++ ) {
          }
         'vignette1' { Vignette -image $imgs[0] -output $imgs[0]}
         'vignette2' { Vignette -image $imgs[1] -output $imgs[1]}
+        'gray1' { ToGrayscale -image $imgs[0] }
+        'gray2' { ToGrayscale -image $imgs[1] }
         'rotate1' { 
             if ($i -lt $args.Count) {
                 $consumed = Rotate -image $imgs[0] -rotateToken $args[$i + 1]
@@ -62,6 +64,7 @@ for ( ;$i -lt $args.count; $i++ ) {
             Scale -image $imgs[1] -width $args[$i+1] -height $args[$i+2] 
             $i += 2
         }
+        'diff' { DiffImages -image1 $imgs[0] -image2 $imgs[1] }
         'save' {
             $iter = 0
             while (![string]::IsNullOrEmpty($imgs[$iter]))
