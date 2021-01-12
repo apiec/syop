@@ -10,9 +10,9 @@ while ($args[$i].Contains('.png') -or
        $args[$i].Contains('.bmp')) {
 
     $fileName = $args[$i]
-    if ($fileName.substring(0, 2) -eq './') {
+    if ($fileName.substring(0, 2) -eq './' -or $fileName.substring(0, 2) -eq '.\') {
         $callerPath = Get-Location
-        $fileName = $fileName.substring(2, $fileName.Length - 2)
+        $fileName = $fileName.substring(1, $fileName.Length - 1)
         $fileName = $callerPath.ToString() + $fileName
     }
 
@@ -99,8 +99,9 @@ for ( ;$i -lt $args.Count; $i++ ) {
             $iter = 0
             while (![string]::IsNullOrEmpty($imgs[$iter]))
             {
-                $fileName = ($iter + 1).ToString() + ".png"
-                $imgs[$iter].Save($fileName)
+                $pathName = Get-Location
+                $fileName = $pathName.ToString() + "\" + ($iter + 1).ToString() + ".png"
+                $imgs[$iter].save($fileName)
                 Write-Host "File $fileName succesfully saved."
                 $iter++
                 if ($iter -eq 2) {
@@ -110,3 +111,4 @@ for ( ;$i -lt $args.Count; $i++ ) {
         }
     }
 } 
+
